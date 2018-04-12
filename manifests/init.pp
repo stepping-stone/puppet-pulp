@@ -447,6 +447,7 @@ class pulp (
       login_method  => $login_method,
       username      => $default_login,
       password      => $default_password,
+      host          => $server_name,
       require       => Class['pulp::apache'],
     }
   }
