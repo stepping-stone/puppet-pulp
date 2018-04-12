@@ -1,5 +1,8 @@
 # configure apache
-class pulp::apache {
+class pulp::apache(
+  $server_name = downcase($::fqdn),
+  $server_aliases = [downcase($::hostname), downcase($::fqdn)],
+){
   include ::apache
   include ::apache::mod::proxy
   include ::apache::mod::proxy_http
@@ -15,8 +18,8 @@ class pulp::apache {
         priority            => '05',
         docroot             => '/usr/share/pulp/wsgi',
         port                => 80,
-        servername          => $::pulp::params::server_name,
-        serveraliases       => [$::hostname, $::fqdn],
+        servername          => $server_name,
+        serveraliases       => $server_aliases,
         additional_includes => '/etc/pulp/vhosts80/*.conf',
       }
     }
@@ -74,8 +77,8 @@ class pulp::apache {
       priority                   => '05',
       docroot                    => '/usr/share/pulp/wsgi',
       port                       => 443,
-      servername                 => $::pulp::params::server_name,
-      serveraliases              => [$::hostname, $::fqdn],
+      servername                 => $server_name,
+      serveraliases              => $server_aliases,
       keepalive                  => 'on',
       max_keepalive_requests     => $::pulp::max_keep_alive,
       ssl                        => true,
