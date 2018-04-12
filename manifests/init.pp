@@ -103,6 +103,9 @@
 # $https_key::                  Apache private certificate for ssl
 #
 # $https_chain::                apache chain file for ssl
+# 
+# $https_ca::                   ca used to authenticate the admin client against Apache. Must be the same CA signed
+#                               $https_cert, defaults to the same value as $ca_cert.
 #
 # $ssl_username::               Value to use for SSLUsername directive in apache vhost. Defaults to SSL_CLIENT_S_DN_CN.
 #                               Set an empty string or false to unset directive.
@@ -304,6 +307,7 @@ class pulp (
   Optional[Stdlib::Absolutepath] $https_cert = $::pulp::params::https_cert,
   Optional[Stdlib::Absolutepath] $https_key = $::pulp::params::https_key,
   Optional[Stdlib::Absolutepath] $https_chain = $::pulp::params::https_chain,
+  Optional[Stdlib::Absolutepath] $https_ca = $::pulp::params::ca_cert,
   Variant[String, Boolean] $ssl_username = $::pulp::params::ssl_username,
   Integer $user_cert_expiration = $::pulp::params::user_cert_expiration,
   Integer $consumer_cert_expiration = $::pulp::params::consumer_cert_expiration,
@@ -443,7 +447,7 @@ class pulp (
       enable_puppet => $enable_puppet,
       enable_python => $enable_python,
       enable_rpm    => $enable_rpm,
-      ca_path       => $ca_cert,
+      ca_path       => $https_ca,
       login_method  => $login_method,
       username      => $default_login,
       password      => $default_password,
